@@ -7,7 +7,15 @@ replicateM' n a | n > 0 = (:) <$> a <*> replicateM' (n - 1) a
 replicateM_' 0 _ = return []
 replicateM_' n a | n > 0 = a >> replicateM_' (n - 1) a
 
-
+forM' [] _ = return []
+forM' (x:xs) f = (:) <$> f x <*> forM' xs f
+                 
+forM_' [] _ = return []
+forM_' (x:xs) f = f x >> forM_' xs f
+                  
+when' b a = if b then a else return ()
+unless' b = when' $ not b
+            
 
 main = do
     let dice = getStdRandom $ randomR (1, 6) :: IO Int
